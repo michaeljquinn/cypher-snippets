@@ -1,0 +1,346 @@
+= Test attempt 1
+
+[red]#Q1# - page cache +_
+* page cache is off heap +
+* dbms.pagecaache.memory to configure, and should hold entire graph +
+* written in java +
+* minimal overhead compared to disk
+0 out of 2 points
+
+[green]#Q2# - You can create multiple relationships between nodes, even if the relationship type is the same, and you
+can assign different properties to each of the relationships +
+1 out of 1
+
+[green]#Q3# - Allow procs to have unrestricted access to db with the "dbms.security.procedures.unrestricted" property
+Node
+
+
+[green]#Q4# - LIMIT clause - specifies the number of rows returned by a query
+
+[red]#Q5# - timeline tree - where separate nodes with no specific relationship need to be aggreated by time
+
+[red]#Q6# - aggregation in cypher - cypher provides aggregation functions, rather than GROUP_BY etc...  Aggregation functions
+take a set of values and perform a function. eg min(), count(*) etc... are examples of aggregation functions
+
+[red]#Q7# - Deleting a node with a specified id AND all its associated relationships
+ - eg a:Node {id: 1234}
+ use path
+ - MATCH (a:Node {id: 1234})  OPTIONAL MATCH (a)-(r)-()  DELETE a,r
+ or
+  - DETATCH DELETE MATCH (a:Node {id: 1234})  DETATCH DELETE a
+
+  notes: DETATCH - TBD
+
+
+[red]#Q8# - Max memory use by Neo4j - includes page cach (pff heap) and java heap, so
+  dbms.pagecache.memory AND wrapper.javax.maxmemory
+  notes - wrapper properties - TBD
+
+[red]#Q9# - language drivers, connection sessions and thread safety
+  language driver sessions are not thread safe
+  NOTES: TBD
+
+[green]#Q10# - modeling the "absence" of a relationship
+  just dont create one, no need to be explicit
+
+[green]#Q11# -MERGE statement to create if not there, but leave alone if it is, avoids duplication
+
+[green]#Q12# - The building blocks of a graph db are nodes, relationships, properties and labels
+
+[green]#Q13# - What is the neo4j runtime - its java
+
+[green]#Q14# -
+[source,cypher]
+---
+MATCH (a:Employee {id: 5})-[:WORKS_FOR]->(b:Company {name: "Acme})
+RETURN a
+LIMIT 10;
+---
+Why would this query NOT return all employees
+1 - if Employee id has unique constraint - then only 1 would return
+2 - if there are more than 10 employees, the LIMIT clause will return only 10
+
+[green]#Q15#
+What are properties on a neo4j graph
+both nodes and relationships can have properties
+
+[red]#Q16# +
+Language drivers are used in which access mode in Neo4j
+Always read and write
+Restrictions are TBD
+
+[green]#Q17# +
+CONNECT_BY clause in cypher - not a valid cypher
+
+[green]#Q18# +
+cypher has a number of stats functions -
+what is the list of available functions in cypher (not apoc)
+TBD
+
+[green]#Q19# +
+Responsibility of core servers in a cluster - read up on cluster management
+
+[green]#Q20# +
+Available neo4j versions - open and commercial (enterprise)
+
+[red]#Q21# +
+Creating a list of values from aggregation
+read up on aggregation functions - see collect() function - TBD
+
+[green]#Q22# +
+ Usage of foreign keys - neo4j (or any graph db) doesn't need them
+
+[green]#Q23# +
+ UNIQUE contraint in neo4j - specifies the value of a property should be unique for a given node label
+
+[green]#Q24# +
+ Neo4j can be embedded in java apps, but not others
+
+[red]#Q25# +
+create index syntax = CREATE INDEX ON Customer{id};  - no preceding :
+read CYPHER refcard syntax
+
+[green]#Q26# +
+neo4j2.2 introduced basic authentication
+read up on timeline of features introduced into neo4j
+
+[red]#Q27# +
+LOAD CSV syntax, delimiter defined by FIELDTERMINATOR, not DELIMITER
+
+[green]#Q28# +
+Guessed the TYPE keyword, on
+MATCH (a)-[b]->(c). how do i get the type of the relationship here - RETURN TYPE(b)
+
+[green]#Q29# +
+Neo4j schema objects - list these - nodes, relationships, indexes, constraints ?? are there others +
+TBD
+
+[red]#Q30# +
+Cluster configuration properties and what do they do +
+causal_clustering.initial_discovery_members - defines the list of other known instances in the cluster -
+TBD
+
+[red]#Q31# +
+Data types (property types) supported by Neo4j +
+Number, boolean, byte[], Strings, String[], Date
+
+[red]#Q32# +
+What are nodes - they are endpoints on either side of a relationship.  +
+Need to read up on graph components
+
+[red]#Q33# +
+finding a node and setting its property
+find the node -
+MATCH(a:Person {name: "Jason"})-[:FRIEND]-(b:Person)
+hmm, whats with the -[:FRIEND]- construct ?? - no arrow, does this mean bidirectional ?
+WITH COLLECTION(b)  //  read up on the "COLLECTION" keyword
+AS friends          // just names the collection
+FOREACH             // iterate over the collection
+(n in friends                  // iterator n
+| SET n.verified = TRUE)      // pipe the output into
+this is useful if we want to do more as we iterate
+
+MATCH(a:Person {name: "Jason"})-[:FRIEND]-(b:Person)
+SET b.verfied = TRUE
+// simpler
+
+[red]#Q34# +
+Operators in cypher
+eg RETURN null <> false - whats the '<>' operator ?? ,
+this returns null
+
+[red]#Q35# - parameterising cypher +
+read up on what bits of cypher can be parameterised
+
+[green]#36# +
+more clustering config properties
+
+[green]#Q37# +
+can have multiple labels on a node
+
+[red]#Q38# +
+db interrogation functions - eg num nodes, labels etc
+CALL db.labels() YIELD label  return label // read up on YIELD +
+CALL db.labels()
+
+[red]#Q39# +
+benefits of parameterising cypher
+permormant and secure
+
+[green]#Q40# +
+performance tuning with cypher - read up on this
+this quesion was about PROFILE keyword
+
+[green]#Q41# +
+allow multiple relationsips on a node
+
+[red]#Q42# +
+more db interrogation functions .  preceded with either db or dbms
+
+[green]#Q43# +
+must know all valid cypher clauses and keywords
+
+[green]#Q44# +
+fluked this one - EXTRACT keyword - need a simple summary list
+of all cypher keywords - refcard is ok, maybe need a shorter summary
+see cyper-keywords.adoc
+
+[red]#Q45# +
+neo4j backups and more on configuration properties
+this was about keep_logical_logs - log files with transaction history
+
+
+[green]#Q46# +
+how to load data into Neo4j
+CYPHER LOAD CSV or against rest interface
+
+[green]#Q47# +
+list of procedures available on db - dbms.procedures
+
+[red]#Q48# +
+authorization and authentication are enabled by default (of course they are - its uname/pword)
+
+[red]#Q49# +
+incremental backup IS available with neo4j
+read up on how its done - via backup dir and transactions and how the backup tool works
+
+[green]#Q50# +
+avoid dupes with the MERGE keyword
+
+[green]#Q51# +
+noe4j is ACID compliant - ACID means - > Atomicity, Consistent, Isolation, Durable
+
+[red]#Q52# +
+count(*) vs count(n)  - count(*) is row count,
+read up on count function
+
+[green]#Q53#
+what sort of db is Neo4j - duh!!!
+
+[green]#Q54# +
+What is cypher - declarative query language
+
+[green]#Q55# +
+Neo4j relationships are directional
+
+[green]#Q56# +
+What is a property graph model - nodes, relationships and properties add context
+with relevant information attached to the nodes and relationships
+
+[green]#Q57# +
+which neo4j logs are there - neo4j.log and debug.log
+
+[green]#58# +
+different types of nodes in a causal cluster - read up on them, eg read replicas
+
+[green]#Q59# +
+Running an online backup - what does neo4j do, it chooses between incremental and full, based on whether an existing backup is
+found and there are enough log files to do incremental
+
+[green]#Q60#  - fluked this one too +
+prefix for URI when connecting to a cluster - bolt+routing
+
+[green]#Q61# +
+neo4j is written in java duh!!
+
+[green]#Q62# +
+describe the Neo4j data model - nodes, relationships and properties
+
+[green]#63# +
+bit of a guess for me
+- signal error from procedure (which is java code) - RuntimeException
+
+[green]#Q64# +
+Describe a relationship in Neo4j - a structure with a name and direction
+
+[red]#Q65# +
+How many nodes can a relationship connect +
+one - a relationship to itself
+two - a relationship between 2 nodes
+
+[green]#Q66# +
+drivers used to connect to neo4j - what languaes do they support
+this question was about the bolt driver
+java and  python at the moment, but this is changing
+
+[red]#Q67# +
+how did i get this one wrong!!
+what describes a label
+lables are not special properties, they are tags
+
+[green]#Q68# +
+simple match/where construct from multi guess
+hmm look up searching for properties on relationships
+and where clauses on relationships
+
+[red]#Q69# +
+question on why labels are important - 3 pointa !!
+there was 3 answers - "which are reasons !!!"
+grouping nodes, represent entities, indexes and constraints
+
+[red]#Q70# +
+what is an intermediate node used for
+- connecting more than 2 nodes in a single context.
+eg (a:Node1)-[:KNOWS]->(b:Node2)<-[:WORKS_FOR]-(c:Node3) ???
+not sure if thats right - look it up
+
+[green]#Q71# +
+nodes with the same label dont have to have the same property keys
+
+[red]#Q72# +
+TLS is off by default
+TLS encryption is used by language drivers
+look up on TLS connection properties
+
+[red]#Q73# +
+Question said "following reason [yellow]#s# hinting more than 1 answer
+in neo4j modeling a linked list is used +
+link entities in a list AND start to end nodes
+
+[green]#Q74# +
+got this right, but read up on [:KNOWS*1..2] etc  for how this works
+
+[green]#Q75#  +
+Neo4j deployment
+embedded or standalone
+
+[green]#Q76#  +
+Relationships are defined for node INSTANCES !!
+
+[red]#Q77# +
+performance tuning neo4j
+read up on ways to do this esp on a cluster
+
+[green]#Q78# +
+read replicas in a cluster - read up on other types in the cluster
+scaling out graph loads
+
+[red]#Q79# +
+setting properties on a node, use SET
+more reading on cypher keywords
+
+[green]#Q80#
+cypher example TBD
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
